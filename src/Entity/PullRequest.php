@@ -23,7 +23,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\HasLifecycleCallbacks()
  * @ORM\Entity(repositoryClass="App\Repository\ProductRepository")
  */
-class Product
+class PullRequest
 {
     /**
      * @var integer
@@ -37,9 +37,16 @@ class Product
     /**
      * @var string
      *
-     * @ORM\Column(name="number", type="string", length=255)
+     * @ORM\Column(name="number", type="string", length=55)
      */
     private $number;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="title", type="string", length=255)
+     */
+    private $title;
 
     /**
      * @var string|null
@@ -51,6 +58,20 @@ class Product
     /**
      * @var string|null
      *
+     * @ORM\Column(name="user_github_login", type="string", length=55, nullable=true)
+     */
+    private $user_github_login;
+
+    /**
+     * @var string|null
+     *
+     * @ORM\Column(name="user_github_id", type="string", length=55, nullable=true)
+     */
+    private $user_github_id;
+
+    /**
+     * @var string|null
+     *
      * @ORM\Column(name="description", type="string", length=4000, nullable=true)
      */
     private $description;
@@ -58,9 +79,23 @@ class Product
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="create_date", type="datetimetz")
+     * @ORM\Column(name="pr_created_at", type="datetimetz")
      */
-    private $create_date;
+    private $pr_created_at;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="pr_updated_at", type="datetimetz")
+     */
+    private $pr_updated_at;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="state", type="string", length=25)
+     */
+    private $state;
 
     /**
      * @ORM\Column(name="status", type="boolean")
@@ -100,6 +135,22 @@ class Product
     }
 
     /**
+     * @return string
+     */
+    public function getTitle()
+    {
+        return $this->title;
+    }
+
+    /**
+     * @param string $title
+     */
+    public function setTitle($title)
+    {
+        $this->title = $title;
+    }
+
+    /**
      * @return null|string
      */
     public function getUrl()
@@ -113,6 +164,38 @@ class Product
     public function setUrl($url)
     {
         $this->url = $url;
+    }
+
+    /**
+     * @return null|string
+     */
+    public function getUserGithubLogin()
+    {
+        return $this->user_github_login;
+    }
+
+    /**
+     * @param null|string $user_github_login
+     */
+    public function setUserGithubLogin($user_github_login)
+    {
+        $this->user_github_login = $user_github_login;
+    }
+
+    /**
+     * @return null|string
+     */
+    public function getUserGithubId()
+    {
+        return $this->user_github_id;
+    }
+
+    /**
+     * @param null|string $user_github_id
+     */
+    public function setUserGithubId($user_github_id)
+    {
+        $this->user_github_id = $user_github_id;
     }
 
     /**
@@ -134,17 +217,49 @@ class Product
     /**
      * @return \DateTime
      */
-    public function getCreateDate()
+    public function getPrCreatedAt()
     {
-        return $this->create_date;
+        return $this->pr_created_at;
     }
 
     /**
-     * @param \DateTime $create_date
+     * @param \DateTime $pr_created_at
      */
-    public function setCreateDate($create_date)
+    public function setPrCreatedAt($pr_created_at)
     {
-        $this->create_date = $create_date;
+        $this->pr_created_at = $pr_created_at;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getPrUpdatedAt()
+    {
+        return $this->pr_updated_at;
+    }
+
+    /**
+     * @param \DateTime $pr_updated_at
+     */
+    public function setPrUpdatedAt($pr_updated_at)
+    {
+        $this->pr_updated_at = $pr_updated_at;
+    }
+
+    /**
+     * @return string
+     */
+    public function getState()
+    {
+        return $this->state;
+    }
+
+    /**
+     * @param string $state
+     */
+    public function setState($state)
+    {
+        $this->state = $state;
     }
 
     /**
