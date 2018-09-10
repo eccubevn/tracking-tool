@@ -16,7 +16,7 @@
     <!-- inject:css -->
     <link rel="stylesheet" href="{{ asset('css/style.css') }}">
     <!-- endinject -->
-    <link rel="shortcut icon" href="{{ asset('images/favicon.png') }}" />
+    <link rel="shortcut icon" href="{{ asset('images/favicon.png') }}"/>
     {% block stylesheets %}{% endblock %}
 </head>
 
@@ -30,8 +30,9 @@
         {% include '_sidebar.twig' %}
         <!-- partial -->
         <div class="main-panel">
-
-            {% block body %}{% endblock %}
+            <div class="content-wrapper">
+                {% block body %}{% endblock %}
+            </div>
             {% block javascripts %}{% endblock %}
 
             <!-- content-wrapper ends -->
