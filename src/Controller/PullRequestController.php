@@ -35,7 +35,7 @@ class PullRequestController extends \App\Controller\AbstractController
      */
     public function index(ApiService $apiService)
     {
-        $this->apiService->getCallPullRequest();
+//        $this->apiService->getCallPullRequest();
         $PullRequest = $this->pullRequestRepo->findAll();
 
         return $this->render('pull_request/index.html.twig', [

@@ -108,6 +108,11 @@ class PullRequest
     private $original_data;
 
     /**
+     * @ORM\Column(name="detail_data", type="text")
+     */
+    private $detail_data;
+
+    /**
      * @return int
      */
     public function getId()
@@ -288,7 +293,7 @@ class PullRequest
      */
     public function getOriginalData()
     {
-        return $this->original_data;
+        return json_decode($this->original_data);
     }
 
     /**
@@ -297,5 +302,21 @@ class PullRequest
     public function setOriginalData($original_data)
     {
         $this->original_data = $original_data;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getDetailData()
+    {
+        return json_decode($this->detail_data);
+    }
+
+    /**
+     * @param mixed $detail_data
+     */
+    public function setDetailData($detail_data)
+    {
+        $this->detail_data = $detail_data;
     }
 }

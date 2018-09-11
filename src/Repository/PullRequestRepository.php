@@ -21,27 +21,26 @@ class PullRequestRepository extends AbstractRepository
         parent::__construct($registry, PullRequest::class);
     }
 
-    public function save($api){
-        foreach ($api as $item) {
-            $prId = $item['id'];
-            if (!$this->count(['number' => $prId])) {
-                $created_at = new Carbon($item['created_at']);
-                $updated_at = new Carbon($item['updated_at']);
+    public function save($item, $detail){
+        $prId = $item['id'];
+        if (!$this->count(['number' => $prId])) {
+            $created_at = new Carbon($item['created_at']);
+            $updated_at = new Carbon($item['updated_at']);
 
-                $pr = new PullRequest();
-                $pr->setNumber($prId);
-                $pr->setTitle($item['title']);
-                $pr->setUrl($item['html_url']);
-                $pr->setUserGithubLogin($item['user']['login']);
-                $pr->setUserGithubId($item['user']['id']);
-                $pr->setPrCreatedAt(new \DateTime($created_at->toDateTimeString()));
-                $pr->setPrUpdatedAt(new \DateTime($updated_at->toDateTimeString()));
-                $pr->setState($item['state']);
-                $pr->setStatus(1);
-                $pr->setOriginalData(json_encode($item));
-                $this->getEntityManager()->persist($pr);
-                $this->getEntityManager()->flush($pr);
-            }
+            $pr = new PullRequest();
+            $pr->setNumber($prId);
+            $pr->setTitle($item['title']);
+            $pr->setUrl($item['html_url']);
+            $pr->setUserGithubLogin($item['user']['login']);
+            $pr->setUserGithubId($item['user']['id']);
+            $pr->setPrCreatedAt(new \DateTime($created_at->toDateTimeString()));
+            $pr->setPrUpdatedAt(new \DateTime($updated_at->toDateTimeString()));
+            $pr->setState($item['state']);
+            $pr->setStatus(1);
+            $pr->setOriginalData(json_encode($item));
+            $pr->setDetailData(json_encode($detail));
+            $this->getEntityManager()->persist($pr);
+            $this->getEntityManager()->flush($pr);
         }
     }
 }

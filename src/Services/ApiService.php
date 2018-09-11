@@ -68,7 +68,10 @@ class ApiService
         $api = $this->call(ApiService::$urlPRs.'?state=all');
 
         if ($api) {
-            $this->pullRequestRepo->save($api);
+            foreach ($api as $item) {
+                $detail = $this->call($item['url']);
+                $this->pullRequestRepo->save($item, $detail);
+            }
         }
     }
 }
