@@ -3,51 +3,43 @@
 namespace App\Controller;
 
 use App\Entity\PullRequest;
+use App\Repository\PullRequestRepository;
 use App\Services\ApiService;
-use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Carbon\Carbon;
 use Symfony\Component\Routing\Annotation\Route;
 
-class PullRequestController extends AbstractController
+class PullRequestController extends \App\Controller\AbstractController
 {
-    /** @var  EntityManagerInterface */
-    protected $entityManager;
+    /** @var PullRequestRepository */
+    protected $pullRequestRepo;
+
+    /** @var  ApiService */
+    protected $apiService;
 
     /**
      * PullRequestController constructor.
-     *
-     * @param EntityManagerInterface $entityManager
+     * @param PullRequestRepository $pullRequestRepo
+     * @param ApiService $apiService
      */
-    public function __construct(EntityManagerInterface $entityManager)
+    public function __construct(PullRequestRepository $pullRequestRepo, ApiService $apiService)
     {
-        $this->entityManager = $entityManager;
+        $this->pullRequestRepo = $pullRequestRepo;
+        $this->apiService = $apiService;
     }
 
 
     /**
      * @Route("/pull/request", name="pull_request")
+     *
+     * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function index()
+    public function index(ApiService $apiService)
     {
-        $api = ApiService::getInstance()->call(ApiService::GET_PRs);
+        $this->apiService->getCallPullRequest();
+        $PullRequest = $this->pullRequestRepo->findAll();
 
-        if($api){
-            foreach ($api as $item){
-                $pr = new PullRequest();
-                $pr->setNumber($item['id']);
-                $pr->setUrl($item['url']);
-                $pr->setUserGithubLogin($item['user']['login']);
-                $pr->setUserGithubId($item['user']['id']);
-                $pr->setPrCreatedAt($item['created_at']);
-                $pr->setPrCreatedAt($item['updated_at']);
-                $pr->setState($item['state']);
-                $pr->setStatus(1);
-                $this->entityManager->persist($pr);
-                $this->entityManager->flush($pr);
-            }
-        }
         return $this->render('pull_request/index.html.twig', [
-            'controller_name' => 'PullRequestController',
+            'PullRequest' => $PullRequest,
         ]);
     }
 }

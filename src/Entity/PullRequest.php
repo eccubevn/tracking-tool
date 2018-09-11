@@ -16,12 +16,12 @@ namespace App\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Product
+ * PullRequest
  *
  * @ORM\Table(name="dtb_pull_request")
  * @ORM\InheritanceType("SINGLE_TABLE")
  * @ORM\HasLifecycleCallbacks()
- * @ORM\Entity(repositoryClass="App\Repository\ProductRepository")
+ * @ORM\Entity(repositoryClass="App\Repository\PullRequestRepository")
  */
 class PullRequest
 {
@@ -101,6 +101,11 @@ class PullRequest
      * @ORM\Column(name="status", type="boolean")
      */
     private $status;
+
+    /**
+     * @ORM\Column(name="original_data", type="text")
+     */
+    private $original_data;
 
     /**
      * @return int
@@ -276,5 +281,21 @@ class PullRequest
     public function setStatus($status)
     {
         $this->status = $status;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getOriginalData()
+    {
+        return $this->original_data;
+    }
+
+    /**
+     * @param mixed $original_data
+     */
+    public function setOriginalData($original_data)
+    {
+        $this->original_data = $original_data;
     }
 }

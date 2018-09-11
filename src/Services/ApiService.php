@@ -7,32 +7,36 @@
  */
 namespace App\Services;
 
+use App\Entity\PullRequest;
+use App\Repository\PullRequestRepository;
+use Carbon\Carbon;
+use Doctrine\ORM\EntityManagerInterface;
+
 class ApiService
 {
     const
-        GET_PRs = 'https://api.github.com/repos/EC-CUBE/ec-cube/pulls';
+        REPO_USER = 'EC-CUBE',
+        REPO_NAME = 'ec-cube';
+
+    public static $urlPRs = 'https://api.github.com/repos/'.self::REPO_USER.'/'.self::REPO_NAME.'/pulls';
+
+
+    /** @var PullRequestRepository */
+    protected $pullRequestRepo;
+
+    /** @var EntityManagerInterface */
+    protected $entityManager;
 
     /**
-     * @var object ApiService
-     */
-    protected static $_instance;
-
-    public function init()
-    {
-    }
-
-    /**
-     * @param bool $refresh
+     * ApiService constructor.
      *
-     * @return ApiService|object
+     * @param PullRequestRepository $pullRequestRepo
+     * @param EntityManagerInterface $entityManager
      */
-    public static function getInstance($refresh = false)
+    public function __construct(PullRequestRepository $pullRequestRepo, EntityManagerInterface $entityManager)
     {
-        if ($refresh || !(self::$_instance instanceof self)) {
-            self::$_instance = new self();
-        }
-
-        return self::$_instance;
+        $this->pullRequestRepo = $pullRequestRepo;
+        $this->entityManager = $entityManager;
     }
 
     public function call($url)
@@ -58,5 +62,13 @@ class ApiService
         curl_close($ch);
         $result = json_decode(trim($output), true);
         return $result;
+    }
+
+    public function getCallPullRequest(){
+        $api = $this->call(ApiService::$urlPRs.'?state=all');
+
+        if ($api) {
+            $this->pullRequestRepo->save($api);
+        }
     }
 }
